@@ -1,0 +1,43 @@
+#stages for build: 
+#test -> build -> deploy. 
+
+name: CI/CD
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+      
+      - name: Run Tests
+        run: pytest
+        
+      - name: Build Docker Image
+        run: docker build -t devopsproj -f Dockerfile .
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Copy Docker image to VM
+        run: |
+          docker save devopsproj | ssh ikt206 'docker load'
+
+      
+
