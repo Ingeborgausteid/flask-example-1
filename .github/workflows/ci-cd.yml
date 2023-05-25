@@ -19,7 +19,6 @@ jobs:
       - name: Dependencies
         run: |
           pip install -r requirements.txt
-          pip install --upgrade flask
           pip install pytest
       
       - name: Run Tests
