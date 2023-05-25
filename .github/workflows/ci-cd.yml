@@ -19,7 +19,6 @@ jobs:
       - name: Dependencies
         run: |
           pip install waitress
-          pip install pytest
           pip install --upgrade flask
           pip install pytest
       
